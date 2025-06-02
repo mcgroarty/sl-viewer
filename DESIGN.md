@@ -1,5 +1,7 @@
 # Second Life Viewer Design Document
 
+> **Note:** This initial version of the design document was created by an AI agent to provide comprehensive architectural documentation for the Second Life Viewer project. It serves as a starting point for understanding the codebase and will be updated by human maintainers as the architecture evolves.
+
 ## 1. Overview
 
 ### Project Purpose
@@ -635,7 +637,7 @@ UUID → Asset Type → Data Location
 ### Technology Evolution
 
 - **[ ] Next-Generation Features**
-  - AI-powered content recommendation
+  - AI-assisted content discovery (suggesting marketplace items for user outfits or builds, helping users find relevant community-created content)
   - Advanced physics simulation improvements
   - Procedural content generation tools
   - Enhanced social interaction features
