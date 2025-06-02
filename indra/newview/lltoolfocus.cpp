@@ -133,6 +133,10 @@ bool LLToolCamera::handleMouseDown(S32 x, S32 y, MASK mask)
     // Ex: mouse from numlock emulation
     mClickPickPending = true;
 
+    // Store the original mouse down coordinates for consistent camera focus
+    mMouseDownX = x;
+    mMouseDownY = y;
+
     // If mouse capture gets ripped away, claim we moused up
     // at the point we moused down. JC
     mMouseUpX = x;
@@ -154,9 +158,6 @@ void LLToolCamera::pickCallback(const LLPickInfo& pick_info)
         return;
     }
     camera->mClickPickPending = false;
-
-    camera->mMouseDownX = pick_info.mMousePt.mX;
-    camera->mMouseDownY = pick_info.mMousePt.mY;
 
     gViewerWindow->moveCursorToCenter();
 
