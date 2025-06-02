@@ -220,294 +220,77 @@ Extensible system for media playback and voice communication through dynamically
 
 ## 5. Data Model and Storage
 
-### Data Architecture Overview
-The viewer uses a hybrid storage model combining local caching with server-synchronized data:
+The viewer uses a hybrid storage model combining local caching with server-synchronized data. For detailed information about data management, refer to the relevant subsystem design documents:
 
+- **Asset and Inventory Management**: See [DESIGN-llinventory.md](indra/DESIGN-llinventory.md) for comprehensive inventory and asset handling
+- **Local Storage**: File system and caching details in [DESIGN-llfilesystem.md](indra/DESIGN-llfilesystem.md) (if available)
+- **Network Data**: Client-server synchronization covered in [DESIGN-llmessage.md](indra/DESIGN-llmessage.md)
+- **Settings Management**: Configuration handling distributed across relevant subsystems
+
+### Key Concepts
 - **Local cache** for frequently accessed assets and settings
-- **Server-authoritative** model for inventory and world state
+- **Server-authoritative** model for inventory and world state  
 - **Hierarchical UUIDs** for universal asset identification
 - **Version-controlled** settings and preferences
 
-### Storage Systems
-
-**Asset Cache:**
-- Texture cache with LRU eviction policy
-- Mesh and animation data caching
-- Sound file local storage
-- Configurable cache size limits
-
-**Inventory Database:**
-- Hierarchical folder structure
-- Item metadata with permissions
-- Local SQLite storage for offline access
-- Server synchronization on changes
-
-**Settings Storage:**
-- XML-based configuration files
-- Per-account and global settings separation
-- Default value fallback system
-- Live update capabilities
-
-**Temporary Data:**
-- Object update queues
-- Network message buffers
-- Render command lists
-- UI state variables
-
-### Schema and Versioning
-
-**Asset References:**
-```
-UUID → Asset Type → Data Location
-├── Texture → Cache File → Compressed Image Data
-├── Mesh → Cache File → Vertex/Index Buffers
-├── Animation → Cache File → Keyframe Data
-└── Script → Memory → Compiled Bytecode
-```
-
-**Settings Hierarchy:**
-- Global defaults in app_settings/
-- User overrides in user directory
-- Per-account settings for multi-user support
-- Runtime modifications in memory
-
-**Version Management:**
-- Cache versioning for asset format changes
-- Settings migration on viewer updates
-- Backward compatibility preservation
-- Clean migration paths for breaking changes
-
 ## 6. Security and Permissions Model
 
-### Authentication Mechanisms
+Security is implemented across multiple subsystems with both client-side validation and server-side authority. For detailed security implementation:
 
-**Initial Authentication:**
-- Username/password or OAuth-based login
-- HTTPS-secured credential transmission
-- Time-limited authentication tokens
-- Optional two-factor authentication support
+- **Network Security**: Communication security details in [DESIGN-llmessage.md](indra/DESIGN-llmessage.md) and [DESIGN-llcorehttp.md](indra/DESIGN-llcorehttp.md)
+- **Asset Permissions**: Inventory and asset access control in [DESIGN-llinventory.md](indra/DESIGN-llinventory.md)
+- **Authentication**: Login and session management in [DESIGN-newview.md](indra/DESIGN-newview.md)
 
-**Session Management:**
-- Capability-based authorization system
-- Time-limited session tokens
-- Automatic token renewal
-- Secure logout procedures
-
-### Access Control System
-
-**Asset Permissions:**
-- Copy, Modify, Transfer permission flags
-- Creator and owner attribution
-- Group-based sharing mechanisms
-- Marketplace licensing integration
-
-**World Permissions:**
-- Land parcel access controls
-- Group membership requirements
-- Payment-based access gates
-- Ban list enforcement
-
-**Communication Controls:**
-- Block list for unwanted interactions
-- Voice communication permissions
-- Friend list and presence sharing
-- Group communication privileges
-
-### Security Enforcement Points
-
-**Client-Side Validation:**
-- Input sanitization for user data
-- Bounds checking for UI interactions
-- Asset format validation
-- Network message verification
-
-**Server-Side Authority:**
-- All critical operations server-verified
-- Economic transactions secured
-- Object creation permissions
-- World modification controls
-
-### Data Protection
-
-**Local Data Security:**
-- Settings file access restrictions
-- Cache file integrity checking
-- Credential storage protection
-- Secure memory handling for sensitive data
-
-**Network Security:**
-- HTTPS for web service communication
-- Encrypted voice communication
-- Message integrity verification
-- Protection against common attack vectors
+### Key Security Principles
+- **Capability-based authorization** system for secure resource access
+- **Client-side validation** with server-side authority for critical operations
+- **Encrypted communication** for sensitive data transmission
+- **Granular permissions** for asset sharing and world modification
 
 ## 7. Extensibility and Plugins
 
-### Plugin Architecture
+The viewer supports extensibility through multiple plugin systems and open-source development. For detailed plugin architecture:
 
-**Media Plugins:**
-- CEF (Chromium Embedded Framework) for web content
-- Platform-specific video decoders
-- Audio codec implementations
-- Streaming media support
+- **Plugin Framework**: Core plugin system details in [DESIGN-llplugin.md](indra/DESIGN-llplugin.md) (if available)
+- **Media Integration**: Covered in media plugin subsystems
+- **UI Customization**: Extensibility details in [DESIGN-llui.md](indra/DESIGN-llui.md)
 
-**Plugin Interface:**
-- Standardized API for plugin communication
-- Process isolation for stability
-- Dynamic loading and unloading
-- Version compatibility checking
+### Extension Mechanisms
+- **Media plugins** for web content and video playback
+- **Shader customization** for advanced graphics effects
+- **UI modification** through XUI files and custom widgets
+- **Open source licensing** enabling community forks and contributions
 
-### Extension Points
-
-**Shader System:**
-- Custom GLSL shader loading
-- Material parameter customization
-- Post-processing effect chains
-- Runtime shader compilation
-
-**UI Customization:**
-- XUI file modification support
-- Custom widget development
-- Skin and theme systems
-- Layout manager extensions
-
-**Script Integration:**
-- LSL compilation and execution
-- Custom function libraries
-- External service integration
-- Debug and development tools
-
-### Third-Party Development
-
-**Viewer Forks:**
-- Open source license (LGPL) enables derivatives (see [doc/LGPL-license.txt](doc/LGPL-license.txt))
-- Standardized build system for modifications
-- Community-maintained feature branches
-- Backward compatibility guidelines
-
-For contribution guidelines and community information, see [CONTRIBUTING.md](CONTRIBUTING.md) and [doc/contributions.txt](doc/contributions.txt).
-
-**Asset Pipeline:**
-- External content creation tool support
-- Import/export format standardization
-- Asset validation tools
-- Batch processing utilities
+For contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md) and [doc/contributions.txt](doc/contributions.txt).
 
 ## 8. Performance Considerations
 
-### Known Bottlenecks
+Performance optimization is implemented across all subsystems. For detailed performance information, refer to the Performance and Constraints section in each subsystem's design document:
 
-**Rendering Performance:**
-- High polygon count scenes with many avatars
-- Texture memory limitations on older hardware
-- Shader compilation overhead on startup
-- Transparency overdraw in complex scenes
+- **Rendering Performance**: [DESIGN-llrender.md](indra/DESIGN-llrender.md)
+- **Network Optimization**: [DESIGN-llmessage.md](indra/DESIGN-llmessage.md) and [DESIGN-llcorehttp.md](indra/DESIGN-llcorehttp.md)
+- **Mathematical Operations**: [DESIGN-llmath.md](indra/DESIGN-llmath.md)
+- **UI Responsiveness**: [DESIGN-llui.md](indra/DESIGN-llui.md)
+- **Memory Management**: [DESIGN-llcommon.md](indra/DESIGN-llcommon.md)
 
-**Network Constraints:**
-- Asset download bandwidth for new users
-- UDP packet loss in poor network conditions
-- HTTP request queuing for web services
-- Voice quality degradation with high latency
-
-**Memory Management:**
-- Large texture datasets requiring careful cache management
-- Asset decompression creating temporary memory spikes
-- UI widget creation and destruction overhead
-- Fragmentation from long-running sessions
-
-### Implemented Optimizations
-
-**Graphics Optimizations:**
-- Level-of-detail (LOD) system for objects and avatars
-- Frustum and occlusion culling
-- Texture compression and streaming
-- Deferred rendering for complex lighting
-- Instancing for repeated geometry
-
-**Network Optimizations:**
-- Delta compression for object updates
-- Priority-based message queuing
-- Asset caching with intelligent prefetching
-- Connection pooling for HTTP requests
-
-**Memory Management:**
-- Smart pointer usage for automatic cleanup
-- Object pooling for frequently created items
-- Lazy loading of assets and UI components
-- Garbage collection for script objects
-
-### Performance Guidelines
-
-**Rendering Best Practices:**
-- Maintain consistent frame rates through adaptive quality
-- Use appropriate LOD levels for viewing distance
-- Minimize state changes in render batches
-- Profile shader performance regularly
-
-**Network Efficiency:**
-- Batch small operations where possible
-- Implement proper retry mechanisms
-- Cache frequently accessed data
-- Monitor bandwidth usage patterns
-
-**Memory Usage:**
-- Set appropriate cache size limits
-- Release unused resources promptly
-- Monitor for memory leaks in long sessions
-- Use memory-mapped files for large assets
+### Performance Strategies
+- **Level-of-detail systems** for graphics and simulation
+- **Efficient caching** and background loading
+- **SIMD optimization** for mathematical operations
+- **Asynchronous operations** to maintain UI responsiveness
 
 ## 9. Known Trade-offs and Design Decisions
 
-### Technology Choices
+Major architectural trade-offs and design decisions are documented within each subsystem's design document under the "Known Issues / TODOs" section. This distributed approach provides context-specific details about decisions affecting each component.
 
-**C++ Over Higher-Level Languages:**
-- **Chosen for:** Performance, hardware access, existing ecosystem
-- **Trade-off:** Development complexity vs. runtime efficiency
-- **Limitation:** Longer development cycles, more potential for memory issues
+### Key Trade-offs Overview
+- **C++ vs. Higher-Level Languages**: Performance and hardware access vs. development complexity
+- **Custom UI Framework**: Hardware acceleration vs. native platform integration
+- **OpenGL Cross-platform**: Platform uniformity vs. platform-specific optimizations
+- **Client-Server Model**: Authoritative world state vs. offline capabilities
+- **Asset Streaming**: Faster initial experience vs. network reliability requirements
 
-**Custom UI Framework vs. Standard Toolkit:**
-- **Chosen for:** Hardware acceleration, game-like experience
-- **Trade-off:** Custom development vs. native platform integration
-- **Limitation:** Accessibility features require additional implementation
-
-**OpenGL Over DirectX or Vulkan:**
-- **Chosen for:** Cross-platform compatibility
-- **Trade-off:** Platform uniformity vs. platform-specific optimizations
-- **Limitation:** Cannot leverage latest GPU features as quickly
-
-### Architecture Decisions
-
-**Client-Server Model:**
-- **Chosen for:** Authoritative world state, anti-cheat protection
-- **Trade-off:** Network dependency vs. offline capabilities
-- **Limitation:** Requires constant internet connection
-
-**Asset Streaming vs. Full Download:**
-- **Chosen for:** Faster initial experience, reduced storage requirements
-- **Trade-off:** Smooth streaming vs. network reliability issues
-- **Limitation:** Poor experience with slow or unreliable connections
-
-**Monolithic vs. Microservice Architecture:**
-- **Chosen for:** Simplified deployment, shared state access
-- **Trade-off:** Single process reliability vs. fault isolation
-- **Limitation:** One component failure can crash entire application
-
-### Performance vs. Quality Decisions
-
-**Texture Compression:**
-- **Chosen:** JPEG 2000 for progressive loading
-- **Trade-off:** Load times vs. visual quality
-- **Limitation:** CPU overhead for decompression
-
-**Animation System:**
-- **Chosen:** Client-side animation blending
-- **Trade-off:** Smooth animation vs. network bandwidth
-- **Limitation:** Synchronization challenges in multi-user scenarios
-
-**Rendering Fidelity:**
-- **Chosen:** Configurable quality levels
-- **Trade-off:** Visual appeal vs. hardware compatibility
-- **Limitation:** Wide performance variance across user hardware
+For detailed analysis of specific design decisions, refer to the relevant subsystem design documents.
 
 ## 10. Suggested Future Plans / TODOs
 
@@ -518,82 +301,17 @@ For contribution guidelines and community information, see [CONTRIBUTING.md](CON
 > - The feature request board at https://feedback.secondlife.com/
 > - Internal Linden Lab roadmaps and official announcements
 
-### Short-term Improvements (Next 6-12 months)
+Future improvement suggestions are detailed in each subsystem's design document under the "Known Issues / TODOs" section. This provides context-specific recommendations aligned with each component's architecture and constraints.
 
-- **[ ] Graphics Modernization**
-  - Vulkan rendering backend for better performance
-  - Enhanced PBR material support
-  - Improved HDR and tone mapping
-  - Better shadow mapping techniques
+### High-Level Improvement Areas
+- **Graphics Modernization**: Vulkan support, enhanced PBR materials, improved performance
+- **Architecture Evolution**: Modern C++ standards, modular design, better error handling
+- **Platform Support**: WebAssembly, cloud streaming, VR/AR integration
+- **Developer Experience**: Improved build systems, documentation, and debugging tools
+- **User Experience**: Enhanced UI accessibility, improved onboarding, better content discovery
+- **Code Quality**: Technical debt reduction, modernization, increased test coverage
 
-- **[ ] Performance Optimizations**
-  - Multi-threaded asset loading
-  - Improved object culling algorithms
-  - Better memory pool management
-  - Network protocol optimizations
-
-- **[ ] User Experience Enhancements**
-  - Modernized UI framework with better accessibility
-  - Improved onboarding experience for new users
-  - Enhanced inventory search and management
-
-### Long-term Architectural Changes (1-3 years)
-
-- **[ ] Core Infrastructure**
-  - Migration to modern C++ standards (C++20/23)
-  - Modular architecture with plugin-based components
-  - Improved error handling and crash recovery
-  - Better debugging and profiling tools
-
-- **[ ] Platform Modernization**
-  - WebAssembly build target for browser compatibility
-  - Cloud streaming capabilities
-  - VR/AR platform integration
-
-- **[ ] Developer Experience**
-  - Improved build system with better dependency management
-  - Enhanced debugging tools and profilers
-  - Better documentation and API references
-  - Streamlined third-party contribution process
-
-### Technology Evolution
-
-- **[ ] Next-Generation Features**
-  - AI-assisted content discovery (suggesting marketplace items for user outfits or builds, helping users find relevant community-created content)
-  - Advanced physics simulation improvements
-  - Procedural content generation tools
-  - Enhanced social interaction features
-
-- **[ ] Deprecation Plans**
-  - Legacy OpenGL code paths in favor of modern APIs
-  - Old asset formats migration to more efficient ones
-  - Phased retirement of obsolete platform support
-  - Cleanup of technical debt in core systems
-
-### Code Quality Improvements
-
-- **[ ] Technical Debt Reduction**
-  - Refactor legacy code modules with poor maintainability
-  - Improve unit test coverage across all components
-  - Standardize error handling patterns
-  - Update documentation for all public APIs
-
-- **[ ] Code Modernization**
-  - Adopt modern C++ idioms and best practices
-  - Improve const-correctness throughout codebase
-  - Better separation of concerns in large classes
-  - Reduce coupling between major subsystems
-
-### TODOs Tagged in Code
-
-The codebase contains numerous TODO comments that should be addressed:
-- Performance optimization opportunities in rendering pipeline
-- Error handling improvements in network code
-- Memory leak fixes in UI components
-- Documentation updates for public interfaces
-- Platform-specific code cleanup and standardization
-
----
+For specific implementation details and priorities, consult the individual subsystem design documents and official project planning resources.
 
 ## Document Maintenance and Objectives
 
