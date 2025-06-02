@@ -49,6 +49,38 @@ The viewer follows a modular, layered architecture designed around real-time 3D 
 └─────────────────────────────────────────┘
 ```
 
+### Subsystem Documentation Structure
+
+This document provides a high-level architectural overview. Detailed subsystem documentation is maintained in individual `DESIGN-(directory).md` files within the `indra/` source tree for each major subsystem. Each subsystem design document follows a standardized template with the following sections:
+
+**Template Structure:**
+
+1. **Purpose** - Role of the subsystem and problems it solves
+2. **Key Concepts** - Domain-specific terms, abstractions, and design patterns
+3. **Main Components** - Core modules, classes, and files with their relationships
+4. **How It Works** - Control flows, data flows, algorithms, and logic paths
+5. **Interfaces and Integration** - APIs, data formats, and interactions with other subsystems
+6. **Configuration** - Environment variables, config files, and settings
+7. **Testing** - Test locations, strategies, and coverage limitations
+8. **Performance and Constraints** - Performance considerations and resource constraints
+9. **Dependencies** - External packages and internal module dependencies
+10. **Known Issues / TODOs** - Design weaknesses, refactors, and open issues
+
+**Available Subsystem Documentation:**
+
+- [DESIGN-newview.md](indra/DESIGN-newview.md) - Main viewer application
+- [DESIGN-llcommon.md](indra/DESIGN-llcommon.md) - Common utilities and base classes
+- [DESIGN-llui.md](indra/DESIGN-llui.md) - User interface framework
+- [DESIGN-llmessage.md](indra/DESIGN-llmessage.md) - Network messaging system
+- [DESIGN-llmath.md](indra/DESIGN-llmath.md) - Mathematical utilities
+- [DESIGN-llcorehttp.md](indra/DESIGN-llcorehttp.md) - HTTP core functionality
+- [DESIGN-llrender.md](indra/DESIGN-llrender.md) - Rendering pipeline
+- [DESIGN-llcharacter.md](indra/DESIGN-llcharacter.md) - Character and avatar system
+- [DESIGN-llprimitive.md](indra/DESIGN-llprimitive.md) - 3D object primitives
+- [DESIGN-llinventory.md](indra/DESIGN-llinventory.md) - Inventory management
+- [DESIGN-llwindow.md](indra/DESIGN-llwindow.md) - Window management
+- [DESIGN-llappearance.md](indra/DESIGN-llappearance.md) - Avatar appearance system
+
 ### Key Features
 - **Real-time 3D rendering** with advanced lighting, shadows, and materials (PBR support)
 - **Avatar-based social interaction** with customizable appearances and animations
@@ -74,32 +106,32 @@ For detailed build instructions, refer to the [Second Life Open Source Portal](h
 
 ### Core Indra Libraries
 
-- **`indra/newview/`** - Main viewer application code, UI components, and game logic
-- **`indra/llcommon/`** - Common utilities, base classes, threading, and core data structures
-- **`indra/llrender/`** - OpenGL rendering abstraction and graphics utilities
-- **`indra/llui/`** - User interface framework, widgets, and layout system
-- **`indra/llmath/`** - Mathematical utilities, vectors, matrices, and geometric operations
-- **`indra/llmessage/`** - Network messaging system and protocol implementation
-- **`indra/llimage/`** - Image processing, texture handling, and format conversions
-- **`indra/llwindow/`** - Platform-specific window management and input handling
-- **`indra/llaudio/`** - Audio system and sound management
-- **`indra/llfilesystem/`** - File I/O, directory operations, and disk cache management
-- **`indra/llxml/`** - XML parsing and serialization utilities
-- **`indra/llplugin/`** - Plugin architecture for media and voice systems
-- **`indra/media_plugins/`** - Platform-specific media plugin implementations
-- **`indra/llwebrtc/`** - WebRTC integration for voice communication
-- **`indra/llcharacter/`** - Avatar animation and character systems
-- **`indra/llprimitive/`** - 3D object geometry and primitive definitions
-- **`indra/llinventory/`** - Asset and inventory management systems
+The `indra/` directory contains modular C++ libraries organized by functionality. Each major subsystem has its own directory with detailed documentation in its respective `DESIGN-(directory).md` file:
 
-### Key Subdirectories in newview/
+**Major Subsystems:**
+- **`newview/`** - Main viewer application ([DESIGN-newview.md](indra/DESIGN-newview.md))
+- **`llcommon/`** - Common utilities and base classes ([DESIGN-llcommon.md](indra/DESIGN-llcommon.md))
+- **`llui/`** - User interface framework ([DESIGN-llui.md](indra/DESIGN-llui.md))
+- **`llmessage/`** - Network messaging system ([DESIGN-llmessage.md](indra/DESIGN-llmessage.md))
+- **`llrender/`** - OpenGL rendering abstraction ([DESIGN-llrender.md](indra/DESIGN-llrender.md))
+- **`llmath/`** - Mathematical utilities ([DESIGN-llmath.md](indra/DESIGN-llmath.md))
 
-- **`app_settings/`** - Configuration files, shaders, XML definitions
-- **`skins/`** - UI skin definitions and XUI layout files
-- **`character/`** - Avatar-related configuration files
-- **`gltf/`** - glTF asset handling and material support
-- **`cursors_mac/`, `icons/`** - Platform-specific UI assets
-- **`tests/`** - Unit and integration tests
+**Supporting Libraries:**
+- **`llcharacter/`** - Avatar animation systems ([DESIGN-llcharacter.md](indra/DESIGN-llcharacter.md))
+- **`llinventory/`** - Asset and inventory management ([DESIGN-llinventory.md](indra/DESIGN-llinventory.md))
+- **`llappearance/`** - Avatar appearance system ([DESIGN-llappearance.md](indra/DESIGN-llappearance.md))
+- **`llwindow/`** - Platform-specific window management ([DESIGN-llwindow.md](indra/DESIGN-llwindow.md))
+- **`llprimitive/`** - 3D object geometry ([DESIGN-llprimitive.md](indra/DESIGN-llprimitive.md))
+- **`llcorehttp/`** - HTTP core functionality ([DESIGN-llcorehttp.md](indra/DESIGN-llcorehttp.md))
+
+**Utility Libraries:**
+- **`llimage/`** - Image processing and texture handling
+- **`llaudio/`** - Audio system and sound management
+- **`llfilesystem/`** - File I/O and disk cache management
+- **`llxml/`** - XML parsing and serialization utilities
+- **`llplugin/`** - Plugin architecture for media and voice systems
+- **`media_plugins/`** - Platform-specific media plugin implementations
+- **`llwebrtc/`** - WebRTC integration for voice communication
 
 ## 3. Languages, Frameworks, and File Formats
 
@@ -163,151 +195,28 @@ For detailed build instructions, refer to the [Second Life Open Source Portal](h
 
 ## 4. Major Systems and Components
 
-### Application Core (LLAppViewer)
+The Second Life Viewer is built from several interconnected systems. This section provides a high-level overview of the major components. For detailed information about each system, refer to the specific subsystem design documents listed in the [Subsystem Documentation Structure](#subsystem-documentation-structure) section.
 
-**Purpose:** Central application controller managing initialization, main loop, and shutdown.
-
-**Internal Design:**
-- Singleton pattern for global application state
-- State machine for login, world connection, and shutdown phases
-- Event-driven architecture with timer-based updates
-
-**Key Workflows:**
-1. Application startup → Initialize subsystems → Show login screen
-2. Login process → Authenticate → Connect to simulator → Load world
-3. Main loop → Process events → Update world → Render frame → Repeat
-4. Shutdown → Save settings → Cleanup resources → Exit
-
-**Interfaces/APIs:**
-- Command line argument processing
-- Settings and configuration management
-- Global event broadcasting system
+### Application Core
+Central application controller managing initialization, main loop, and shutdown. Implemented primarily in the `newview/` subsystem with supporting utilities from `llcommon/`. See [DESIGN-newview.md](indra/DESIGN-newview.md) for detailed architecture.
 
 ### Rendering Pipeline
-
-**Purpose:** Real-time 3D rendering of virtual world with advanced graphics features.
-
-**Internal Design:**
-- Deferred rendering pipeline for complex lighting
-- Spatial partitioning with octrees for object culling
-- Multi-pass rendering for transparency and effects
-- Shader-based material system supporting PBR
-
-**Key Workflows:**
-1. Frustum culling → Spatial queries → Build render batches
-2. Depth pre-pass → Opaque geometry → Lighting pass → Transparent objects
-3. Post-processing → UI overlay → Buffer swap
-
-**Interfaces/APIs:**
-- OpenGL abstraction layer (LLRender)
-- Drawable object registration system
-- Texture and material management
-- Camera and viewport control
+Real-time 3D rendering system providing advanced graphics features including deferred rendering, PBR materials, and spatial optimization. Implemented in the `llrender/` subsystem with mathematical support from `llmath/`. See [DESIGN-llrender.md](indra/DESIGN-llrender.md) and [DESIGN-llmath.md](indra/DESIGN-llmath.md).
 
 ### Network Communication
-
-**Purpose:** Handle all communication with Second Life servers and simulators.
-
-**Internal Design:**
-- Custom UDP protocol for real-time world updates
-- HTTP/HTTPS for web services and asset downloads
-- Message templating system for protocol definitions
-- Reliable delivery mechanisms for critical data
-
-**Key Workflows:**
-1. Login: HTTP authentication → Capability URLs → UDP connection
-2. World updates: Receive object updates → Apply transformations → Trigger renders
-3. Asset requests: Check cache → Request from CDN → Decompress → Store
-
-**Interfaces/APIs:**
-- Message building and parsing
-- Circuit management for simulator connections
-- Asset transfer system
-- Web services integration
-
-### Inventory and Asset Management
-
-**Purpose:** Manage user's virtual possessions and asset lifecycle.
-
-**Internal Design:**
-- Hierarchical folder structure with UUIDs
-- Local caching with server synchronization
-- Background fetching for performance
-- Observer pattern for UI updates
-
-**Key Workflows:**
-1. Login → Download inventory skeleton → Fetch items on demand
-2. Asset access → Check local cache → Download from server → Update cache
-3. Inventory changes → Update local → Send to server → Notify observers
-
-**Interfaces/APIs:**
-- Inventory item and folder operations
-- Asset download and caching system
-- Change notification system
-- Search and filtering capabilities
-
-### Avatar and Animation System
-
-**Purpose:** Render and animate user avatars with customizable appearances.
-
-**Internal Design:**
-- Skeletal animation system with bone hierarchies
-- Morph targets for facial expressions and body shapes
-- Attachment point system for clothing and accessories
-- Level-of-detail (LOD) management for performance
-
-**Key Workflows:**
-1. Avatar loading → Fetch appearance → Load textures → Build mesh
-2. Animation playback → Blend poses → Apply to skeleton → Render
-3. Appearance changes → Rebake textures → Update mesh → Notify others
-
-**Interfaces/APIs:**
-- Avatar appearance management
-- Animation asset playback
-- Attachment system
-- Customization and baking services
+Handles all communication with Second Life servers using custom UDP protocols and HTTP services. Implemented in the `llmessage/` and `llcorehttp/` subsystems. See [DESIGN-llmessage.md](indra/DESIGN-llmessage.md) and [DESIGN-llcorehttp.md](indra/DESIGN-llcorehttp.md).
 
 ### User Interface System
+Comprehensive UI framework providing widget-based interface with XML-driven definitions. Implemented in the `llui/` subsystem with window management from `llwindow/`. See [DESIGN-llui.md](indra/DESIGN-llui.md) and [DESIGN-llwindow.md](indra/DESIGN-llwindow.md).
 
-**Purpose:** Provide comprehensive UI framework for virtual world interaction.
+### Avatar and Character Systems
+Manages avatar rendering, animation, and appearance customization. Implemented across `llcharacter/` and `llappearance/` subsystems with primitive support from `llprimitive/`. See [DESIGN-llcharacter.md](indra/DESIGN-llcharacter.md), [DESIGN-llappearance.md](indra/DESIGN-llappearance.md), and [DESIGN-llprimitive.md](indra/DESIGN-llprimitive.md).
 
-**Internal Design:**
-- Widget-based system with layout managers
-- XML-driven UI definitions (XUI format)
-- Event handling with focus management
-- Skinning system for visual customization
+### Inventory and Asset Management
+Handles user possessions, asset caching, and server synchronization. Implemented in the `llinventory/` subsystem with file system support from `llfilesystem/`. See [DESIGN-llinventory.md](indra/DESIGN-llinventory.md).
 
-**Key Workflows:**
-1. UI initialization → Parse XUI files → Create widget hierarchy → Show windows
-2. User interaction → Event capture → Widget processing → Update display
-3. Data binding → Model changes → UI updates → User feedback
-
-**Interfaces/APIs:**
-- Widget creation and management
-- Event handling system
-- Layout and positioning
-- Data binding and notifications
-
-### Voice Communication
-
-**Purpose:** Real-time voice chat for social interaction.
-
-**Internal Design:**
-- WebRTC-based implementation
-- Spatial audio with 3D positioning
-- Push-to-talk and voice activation modes
-- Multiple audio device support
-
-**Key Workflows:**
-1. Voice session → Request capabilities → Connect to voice server → Enable audio
-2. Spatial audio → Calculate 3D positions → Apply audio effects → Mix output
-3. Voice controls → Mute/unmute → Volume adjustment → Device switching
-
-**Interfaces/APIs:**
-- Voice session management
-- Audio device enumeration
-- Spatial audio positioning
-- Voice effect processing
+### Plugin Architecture
+Extensible system for media playback and voice communication through dynamically loaded plugins. Implemented in `llplugin/` and `media_plugins/` subsystems.
 
 ## 5. Data Model and Storage
 
