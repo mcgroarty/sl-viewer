@@ -32,6 +32,11 @@ Third party maintained forks, which include Linux compatible builds, are indexed
 
 [Linux](https://wiki.secondlife.com/wiki/Build_the_Viewer_on_Linux)
 
+## Documentation
+
+- **[DESIGN.md](DESIGN.md)** - Comprehensive architecture documentation explaining the design decisions, system components, and technical structure of the Second Life Viewer. Essential reading for developers who want to understand how the codebase is organized and why architectural choices were made.
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributing to the project, including how to report bugs, submit pull requests, and participate in development.
+
 ## Contribute
 
 Help make Second Life better! You can get involved with improvements by filing bugs, suggesting enhancements, submitting

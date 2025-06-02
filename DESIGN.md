@@ -7,6 +7,8 @@
 ### Project Purpose
 The Second Life Viewer is the official client application for the Second Life virtual world platform. It serves as the primary interface between users and the Second Life metaverse, enabling real-time 3D interaction, social communication, content creation, and economic transactions within a persistent virtual environment.
 
+For additional documentation, resources, and development information, visit the [Second Life Open Source Portal](https://wiki.secondlife.com/wiki/Open_Source_Portal), which serves as the official documentation portal for all open source Second Life projects.
+
 **Who uses it:**
 - End users accessing the Second Life virtual world
 - Content creators building and scripting virtual objects
@@ -19,6 +21,8 @@ The Second Life Viewer is the official client application for the Second Life vi
 - Support user-generated content creation and scripting (LSL - Linden Scripting Language)
 - Facilitate virtual economy through asset transactions and marketplace integration
 - Maintain cross-platform compatibility (Windows, macOS, Linux)
+
+For information on how to contribute to this project, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### High-Level Architecture
 The viewer follows a modular, layered architecture designed around real-time 3D rendering, network communication, and user interface systems:
@@ -62,9 +66,11 @@ The viewer follows a modular, layered architecture designed around real-time 3D 
 
 - **`indra/`** - Main source code tree containing all C++ libraries and applications
 - **`scripts/`** - Build scripts, code generation tools, and utility scripts
-- **`doc/`** - Documentation files, licenses, and project metadata
+- **`doc/`** - Documentation files, licenses, and project metadata (see [doc/](doc/))
 - **`etc/`** - Configuration files and message templates
 - **`buildscripts_support_functions`** - Build system support functions
+
+For detailed build instructions, refer to the [Second Life Open Source Portal](https://wiki.secondlife.com/wiki/Open_Source_Portal) build guides.
 
 ### Core Indra Libraries
 
@@ -465,10 +471,12 @@ UUID → Asset Type → Data Location
 ### Third-Party Development
 
 **Viewer Forks:**
-- Open source license (LGPL) enables derivatives
+- Open source license (LGPL) enables derivatives (see [doc/LGPL-license.txt](doc/LGPL-license.txt))
 - Standardized build system for modifications
 - Community-maintained feature branches
 - Backward compatibility guidelines
+
+For contribution guidelines and community information, see [CONTRIBUTING.md](CONTRIBUTING.md) and [doc/contributions.txt](doc/contributions.txt).
 
 **Asset Pipeline:**
 - External content creation tool support
@@ -680,4 +688,49 @@ The codebase contains numerous TODO comments that should be addressed:
 
 ---
 
-**Note:** This document should be updated periodically as the architecture evolves. CONTRIBUTING.md handles how to contribute to the project, while DESIGN.md explains the what and why of the architectural decisions and system design.
+## Document Maintenance and Objectives
+
+### Document Purpose and Scope
+This DESIGN.md document serves multiple objectives:
+- **Architectural Reference**: Provides developers with a comprehensive understanding of the system design and component relationships
+- **Onboarding Guide**: Helps new developers quickly understand the codebase structure and design decisions
+- **Design Decision Documentation**: Records the rationale behind architectural choices for future reference
+- **Development Planning**: Serves as a foundation for discussing future improvements and changes
+
+The document complements [CONTRIBUTING.md](CONTRIBUTING.md) by focusing on the **"what and why"** of the architecture, while CONTRIBUTING.md addresses the **"how"** of contributing to the project.
+
+### When to Update This Document
+This document should be updated in the following circumstances:
+
+**Required Updates (High Priority):**
+- Major architectural changes or refactoring efforts
+- Addition or removal of core system components
+- Significant changes to the build system or dependencies
+- Updates to data models or storage systems
+- Changes to security or permissions model
+
+**Recommended Updates (Medium Priority):**
+- New major features that introduce significant code changes
+- Performance optimization efforts that affect multiple systems
+- Updates to external dependencies that impact architecture
+- Changes to plugin interfaces or extensibility points
+
+**Optional Updates (Low Priority):**
+- Minor feature additions within existing frameworks
+- Bug fixes that don't affect overall architecture
+- Documentation improvements in other files
+- Updates to suggested future plans based on new priorities
+
+### Update Process
+1. **Before making changes**: Review existing content to understand current architectural documentation
+2. **During development**: Update relevant sections as architectural decisions are made
+3. **After implementation**: Validate that documentation accurately reflects the final implementation
+4. **Regular maintenance**: Review and update suggested future plans quarterly
+
+### Responsibility for Updates
+- **Core maintainers**: Responsible for major architectural documentation updates
+- **Feature developers**: Should update sections related to their changes
+- **Community contributors**: Encouraged to suggest improvements via issues or pull requests
+- **AI assistance**: May periodically suggest updates to future plans and technical content
+
+**Note:** This document should be updated periodically as the architecture evolves. [CONTRIBUTING.md](CONTRIBUTING.md) handles how to contribute to the project, while DESIGN.md explains the what and why of the architectural decisions and system design.
