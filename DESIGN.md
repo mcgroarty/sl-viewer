@@ -594,6 +594,13 @@ UUID → Asset Type → Data Location
 
 ## 10. Suggested Future Plans / TODOs
 
+> **Important Disclaimer:** The suggestions in this section are AI-generated and offered for discussion purposes only. They do not constitute commitments or official plans from Linden Lab. These AI-generated suggestions may be periodically updated to reflect evolving technology and best practices.
+>
+> **Source of Truth for Actual Plans:** For official roadmaps and confirmed development plans, please refer to:
+> - GitHub Issues in this repository
+> - The feature request board at https://feedback.secondlife.com/
+> - Internal Linden Lab roadmaps and official announcements
+
 ### Short-term Improvements (Next 6-12 months)
 
 - **[ ] Graphics Modernization**
