@@ -627,7 +627,6 @@ For contribution guidelines and community information, see [CONTRIBUTING.md](CON
   - Modernized UI framework with better accessibility
   - Improved onboarding experience for new users
   - Enhanced inventory search and management
-  - Better mobile device support
 
 ### Long-term Architectural Changes (1-3 years)
 
@@ -639,7 +638,6 @@ For contribution guidelines and community information, see [CONTRIBUTING.md](CON
 
 - **[ ] Platform Modernization**
   - WebAssembly build target for browser compatibility
-  - Mobile platform support (iOS/Android)
   - Cloud streaming capabilities
   - VR/AR platform integration
 
