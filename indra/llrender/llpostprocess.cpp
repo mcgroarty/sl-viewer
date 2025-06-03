@@ -445,7 +445,7 @@ void LLPostProcess::checkShaderError(GLuint shader)
             /// Could not allocate infolog buffer
             return;
         }
-       glGetProgramInfoLog(shader, infologLength, &charsWritten, infoLog);
+       glGetShaderInfoLog(shader, infologLength, &charsWritten, infoLog);
         // shaderErrorLog << (char *) infoLog << std::endl;
         mShaderErrorString = (char *) infoLog;
         free(infoLog);
