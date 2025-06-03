@@ -80,6 +80,11 @@ This document provides a high-level architectural overview. Detailed subsystem d
 - [DESIGN-llinventory.md](indra/DESIGN-llinventory.md) - Inventory management
 - [DESIGN-llwindow.md](indra/DESIGN-llwindow.md) - Window management
 - [DESIGN-llappearance.md](indra/DESIGN-llappearance.md) - Avatar appearance system
+- [DESIGN-llimage.md](indra/DESIGN-llimage.md) - Image processing and texture handling
+- [DESIGN-llfilesystem.md](indra/DESIGN-llfilesystem.md) - File system operations and disk caching
+- [DESIGN-llplugin.md](indra/DESIGN-llplugin.md) - Plugin architecture for media and extensions
+- [DESIGN-llaudio.md](indra/DESIGN-llaudio.md) - Audio processing and 3D sound
+- [DESIGN-test.md](indra/DESIGN-test.md) - Testing framework and validation infrastructure
 
 ### Key Features
 - **Real-time 3D rendering** with advanced lighting, shadows, and materials (PBR support)
@@ -125,13 +130,14 @@ The `indra/` directory contains modular C++ libraries organized by functionality
 - **`llcorehttp/`** - HTTP core functionality ([DESIGN-llcorehttp.md](indra/DESIGN-llcorehttp.md))
 
 **Utility Libraries:**
-- **`llimage/`** - Image processing and texture handling
-- **`llaudio/`** - Audio system and sound management
-- **`llfilesystem/`** - File I/O and disk cache management
+- **`llimage/`** - Image processing and texture handling ([DESIGN-llimage.md](indra/DESIGN-llimage.md))
+- **`llaudio/`** - Audio system and sound management ([DESIGN-llaudio.md](indra/DESIGN-llaudio.md))
+- **`llfilesystem/`** - File I/O and disk cache management ([DESIGN-llfilesystem.md](indra/DESIGN-llfilesystem.md))
 - **`llxml/`** - XML parsing and serialization utilities
-- **`llplugin/`** - Plugin architecture for media and voice systems
+- **`llplugin/`** - Plugin architecture for media and voice systems ([DESIGN-llplugin.md](indra/DESIGN-llplugin.md))
 - **`media_plugins/`** - Platform-specific media plugin implementations
 - **`llwebrtc/`** - WebRTC integration for voice communication
+- **`test/`** - Testing framework and validation infrastructure ([DESIGN-test.md](indra/DESIGN-test.md))
 
 ## 3. Languages, Frameworks, and File Formats
 
