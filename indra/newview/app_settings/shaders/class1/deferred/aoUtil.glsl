@@ -57,19 +57,21 @@ vec4 getPositionAo(vec2 pos_screen)
     return pos;
 }
 
+// Pre-computed kernel values for better performance
+// exponentially (^2) distant occlusion samples spread around origin
+const vec2 kern[8] = vec2[8](
+    vec2(-0.015625, 0.0),      // vec2(-1.0, 0.0) * 0.125*0.125
+    vec2(0.0625, 0.0),         // vec2(1.0, 0.0) * 0.250*0.250  
+    vec2(0.0, 0.140625),       // vec2(0.0, 1.0) * 0.375*0.375
+    vec2(0.0, -0.25),          // vec2(0.0, -1.0) * 0.500*0.500
+    vec2(0.2767, 0.2767),      // vec2(0.7071, 0.7071) * 0.625*0.625
+    vec2(-0.3973, -0.3973),    // vec2(-0.7071, -0.7071) * 0.750*0.750
+    vec2(-0.5414, 0.5414),     // vec2(-0.7071, 0.7071) * 0.875*0.875
+    vec2(0.7071, -0.7071)      // vec2(0.7071, -0.7071) * 1.000*1.000
+);
+
 vec2 getKern(int i)
 {
-    vec2 kern[8];
-    // exponentially (^2) distant occlusion samples spread around origin
-    kern[0] = vec2(-1.0, 0.0) * 0.125*0.125;
-    kern[1] = vec2(1.0, 0.0) * 0.250*0.250;
-    kern[2] = vec2(0.0, 1.0) * 0.375*0.375;
-    kern[3] = vec2(0.0, -1.0) * 0.500*0.500;
-    kern[4] = vec2(0.7071, 0.7071) * 0.625*0.625;
-    kern[5] = vec2(-0.7071, -0.7071) * 0.750*0.750;
-    kern[6] = vec2(-0.7071, 0.7071) * 0.875*0.875;
-    kern[7] = vec2(0.7071, -0.7071) * 1.000*1.000;
-
     return kern[i] / screen_res;
 }
 
@@ -99,17 +101,17 @@ float calcAmbientOcclusion(vec4 pos, vec3 norm, vec2 pos_screen)
         //radius is somewhat arbitrary, can approx with just some constant k * 1 / dist^2
         //(k should vary inversely with # of samples, but this is taken care of later)
 
-        float funky_val = (dot((samppos_world - 0.05*norm - pos_world), norm) > 0.0) ? 1.0 : 0.0;
+        float funky_val = step(0.0, dot((samppos_world - 0.05*norm - pos_world), norm));
         angle_hidden = angle_hidden + funky_val * min(1.0/dist2, ssao_factor_inv);
 
         // 'blocked' samples (significantly closer to camera relative to pos_world) are "no data", not "no occlusion"
-        float diffz_val = (diff.z > -1.0) ? 1.0 : 0.0;
+        float diffz_val = step(-1.0, diff.z);
         points = points + diffz_val;
     }
 
     angle_hidden = min(ssao_factor*angle_hidden/points, 1.0);
 
-    float points_val = (points > 0.0) ? 1.0 : 0.0;
+    float points_val = step(0.0001, points); // More efficient than points > 0.0
     ret = (1.0 - (points_val * angle_hidden));
 
     ret = max(ret, 0.0);
