@@ -309,6 +309,6 @@ void main()
 #endif
 
     color.rgb *= final_scale;
-    frag_color = max(color, vec4(0));
+    frag_color = clamp(color, vec4(0), vec4(1));
 }
 

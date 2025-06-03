@@ -217,7 +217,7 @@ void main()
     float final_scale = 1;
     if (classic_mode > 0)
         final_scale = 1.1;
-    frag_color = max(vec4(color.rgb * final_scale,a), vec4(0));
+    frag_color = clamp(vec4(color.rgb * final_scale,a), vec4(0), vec4(1));
 }
 
 #else
@@ -271,7 +271,7 @@ void main()
     color += colorEmissive;
 
     color = linear_to_srgb(color);
-    frag_color = max(vec4(color.rgb,a), vec4(0));
+    frag_color = clamp(vec4(color.rgb,a), vec4(0), vec4(1));
 }
 
 #endif
