@@ -264,7 +264,7 @@ void main()
 
     // Calculate some distance fade in the water to better assist with refraction blending and reducing the refraction texture's "disconnect".
 #ifdef SHORELINE_FADE
-    fade = max(0,min(1, (pos.z - refPos.z) / 10));
+    fade = clamp((pos.z - refPos.z) / 10, 0, 1);
 #else
     fade = 1;
 #endif
@@ -342,8 +342,8 @@ void main()
     fade = min(1, fade);
     color = mix(fb.rgb, color, fade);
 
-    float spec = min(max(max(punctual.r, punctual.g), punctual.b), 0);
+    float spec = max(max(max(punctual.r, punctual.g), punctual.b), 0);
 
-    frag_color = min(vec4(1),max(vec4(color.rgb, spec * water_mask), vec4(0)));
+    frag_color = clamp(vec4(color.rgb, spec * water_mask), vec4(0), vec4(1));
 }
 

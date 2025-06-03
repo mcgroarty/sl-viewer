@@ -89,7 +89,7 @@ void main()
     // Compute alpha1, the main cloud opacity
 
     float alpha1 = (cloudNoise(uv1).x - 0.5) + (cloudNoise(uv3).x - 0.5) * cloud_pos_density2.z;
-    alpha1 = min(max(alpha1 + cloudDensity, 0.) * 10 * cloud_pos_density1.z, 1.);
+    alpha1 = clamp((alpha1 + cloudDensity) * 10 * cloud_pos_density1.z, 0., 1.);
 
     // And smooth
     alpha1 = 1. - alpha1 * alpha1;
@@ -101,7 +101,7 @@ void main()
     // Compute alpha2, for self shadowing effect
     // (1 - alpha2) will later be used as percentage of incoming sunlight
     float alpha2 = (cloudNoise(uv2).x - 0.5);
-    alpha2 = min(max(alpha2 + cloudDensity, 0.) * 2.5 * cloud_pos_density1.z, 1.);
+    alpha2 = clamp((alpha2 + cloudDensity) * 2.5 * cloud_pos_density1.z, 0., 1.);
 
     // And smooth
     alpha2 = 1. - alpha2;

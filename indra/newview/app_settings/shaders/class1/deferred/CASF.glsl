@@ -946,10 +946,10 @@ vec3 linear_to_srgb(vec3 cl);
  AU1 ABfi(AU1 src,AU1 ins,AU1 mask){return (ins&mask)|(src&(~mask));}
  AU1 ABfiM(AU1 src,AU1 ins,AU1 bits){AU1 mask=(1u<<bits)-1;return (ins&mask)|(src&(~mask));}
 //------------------------------------------------------------------------------------------------------------------------------
- AF1 AClampF1(AF1 x,AF1 n,AF1 m){return max(n,min(x,m));}
- AF2 AClampF2(AF2 x,AF2 n,AF2 m){return max(n,min(x,m));}
- AF3 AClampF3(AF3 x,AF3 n,AF3 m){return max(n,min(x,m));}
- AF4 AClampF4(AF4 x,AF4 n,AF4 m){return max(n,min(x,m));}
+ AF1 AClampF1(AF1 x,AF1 n,AF1 m){return clamp(x,n,m);}
+ AF2 AClampF2(AF2 x,AF2 n,AF2 m){return clamp(x,n,m);}
+ AF3 AClampF3(AF3 x,AF3 n,AF3 m){return clamp(x,n,m);}
+ AF4 AClampF4(AF4 x,AF4 n,AF4 m){return clamp(x,n,m);}
 //------------------------------------------------------------------------------------------------------------------------------
  AF1 AFractF1(AF1 x){return x-floor(x);}
  AF2 AFractF2(AF2 x){return x-floor(x);}
