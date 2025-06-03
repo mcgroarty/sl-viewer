@@ -57,22 +57,19 @@ vec4 getPositionAo(vec2 pos_screen)
     return pos;
 }
 
-// Pre-computed kernel values for better performance
-// exponentially (^2) distant occlusion samples spread around origin
-const vec2 kern[8] = vec2[8](
-    vec2(-0.015625, 0.0),      // vec2(-1.0, 0.0) * 0.125*0.125
-    vec2(0.0625, 0.0),         // vec2(1.0, 0.0) * 0.250*0.250  
-    vec2(0.0, 0.140625),       // vec2(0.0, 1.0) * 0.375*0.375
-    vec2(0.0, -0.25),          // vec2(0.0, -1.0) * 0.500*0.500
-    vec2(0.2767, 0.2767),      // vec2(0.7071, 0.7071) * 0.625*0.625
-    vec2(-0.3973, -0.3973),    // vec2(-0.7071, -0.7071) * 0.750*0.750
-    vec2(-0.5414, 0.5414),     // vec2(-0.7071, 0.7071) * 0.875*0.875
-    vec2(0.7071, -0.7071)      // vec2(0.7071, -0.7071) * 1.000*1.000
-);
-
 vec2 getKern(int i)
 {
-    return kern[i] / screen_res;
+    // Pre-computed kernel values for better performance
+    // exponentially (^2) distant occlusion samples spread around origin
+    if (i == 0) return vec2(-0.015625, 0.0) / screen_res;       // vec2(-1.0, 0.0) * 0.125*0.125
+    if (i == 1) return vec2(0.0625, 0.0) / screen_res;          // vec2(1.0, 0.0) * 0.250*0.250  
+    if (i == 2) return vec2(0.0, 0.140625) / screen_res;        // vec2(0.0, 1.0) * 0.375*0.375
+    if (i == 3) return vec2(0.0, -0.25) / screen_res;           // vec2(0.0, -1.0) * 0.500*0.500
+    if (i == 4) return vec2(0.276211, 0.276211) / screen_res;   // vec2(0.7071, 0.7071) * 0.625*0.625
+    if (i == 5) return vec2(-0.397744, -0.397744) / screen_res; // vec2(-0.7071, -0.7071) * 0.750*0.750
+    if (i == 6) return vec2(-0.541373, 0.541373) / screen_res;  // vec2(-0.7071, 0.7071) * 0.875*0.875
+    if (i == 7) return vec2(0.7071, -0.7071) / screen_res;      // vec2(0.7071, -0.7071) * 1.000*1.000
+    return vec2(0.0); // fallback
 }
 
 //calculate decreases in ambient lighting when crowded out (SSAO)

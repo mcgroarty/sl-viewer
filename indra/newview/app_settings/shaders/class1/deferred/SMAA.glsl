@@ -774,11 +774,22 @@ void SMAANeighborhoodBlendingVS(float2 texcoord,
 // Edge Detection Pixel Shaders (First Pass)
 
 /**
+ * Helper function to compute maximum component of a color difference
+ * Optimizes repeated max(max(t.r, t.g), t.b) operations
+ */
+float maxComponent(float3 color) {
+    return max(max(color.r, color.g), color.b);
+}
+
+/**
  * Luma Edge Detection
  *
  * IMPORTANT NOTICE: luma edge detection requires gamma-corrected colors, and
  * thus 'colorTex' should be a non-sRGB texture.
  */
+// Pre-computed luma weights for better performance
+const float3 LUMA_WEIGHTS = float3(0.2126, 0.7152, 0.0722);
+
 float2 SMAALumaEdgeDetectionPS(float2 texcoord,
                                float4 offset[3],
                                SMAATexture2D(colorTex)
@@ -831,17 +842,6 @@ float2 SMAALumaEdgeDetectionPS(float2 texcoord,
 
     return edges;
 }
-
-/**
- * Helper function to compute maximum component of a color difference
- * Optimizes repeated max(max(t.r, t.g), t.b) operations
- */
-float maxComponent(float3 color) {
-    return max(max(color.r, color.g), color.b);
-}
-
-// Pre-computed luma weights for better performance
-const float3 LUMA_WEIGHTS = float3(0.2126, 0.7152, 0.0722);
 
 /**
  * Color Edge Detection
