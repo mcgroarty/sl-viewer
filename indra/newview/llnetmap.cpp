@@ -549,23 +549,34 @@ LLVector3 LLNetMap::globalPosToView(const LLVector3d& global_pos)
     LLVector3d camera_position = gAgentCamera.getCameraPositionGlobal();
 
     LLVector3d relative_pos_global = global_pos - camera_position;
-    LLVector3 pos_local;
-    pos_local.setVec(relative_pos_global);  // convert to floats from doubles
-
-    pos_local.mV[VX] *= mPixelsPerMeter;
-    pos_local.mV[VY] *= mPixelsPerMeter;
-    // leave Z component in meters
+    
+    // Perform all calculations in double precision to avoid precision loss at high altitudes
+    F64 pos_x = relative_pos_global.mdV[VX] * mPixelsPerMeter;
+    F64 pos_y = relative_pos_global.mdV[VY] * mPixelsPerMeter;
+    F64 pos_z = relative_pos_global.mdV[VZ]; // leave Z component in meters
 
     static LLUICachedControl<bool> rotate_map("MiniMapRotate", true);
     if( rotate_map )
     {
         F32 radians = atan2( LLViewerCamera::getInstance()->getAtAxis().mV[VX], LLViewerCamera::getInstance()->getAtAxis().mV[VY] );
-        LLQuaternion rot(radians, LLVector3(0.f, 0.f, 1.f));
-        pos_local.rotVec( rot );
+        
+        // Apply rotation in double precision
+        F64 cos_rot = cos(radians);
+        F64 sin_rot = sin(radians);
+        F64 rotated_x = pos_x * cos_rot - pos_y * sin_rot;
+        F64 rotated_y = pos_x * sin_rot + pos_y * cos_rot;
+        pos_x = rotated_x;
+        pos_y = rotated_y;
     }
 
-    pos_local.mV[VX] += getRect().getWidth() / 2 + mCurPan.mV[VX];
-    pos_local.mV[VY] += getRect().getHeight() / 2 + mCurPan.mV[VY];
+    pos_x += getRect().getWidth() / 2 + mCurPan.mV[VX];
+    pos_y += getRect().getHeight() / 2 + mCurPan.mV[VY];
+
+    // Convert to float only at the final step
+    LLVector3 pos_local;
+    pos_local.mV[VX] = (F32)pos_x;
+    pos_local.mV[VY] = (F32)pos_y;
+    pos_local.mV[VZ] = (F32)pos_z;
 
     return pos_local;
 }
