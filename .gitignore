@@ -19,6 +19,8 @@
 # Specific paths and/or names
 CMakeCache.txt
 cmake_install.cmake
+build/
+build-*/
 LICENSES
 build-darwin-*
 build-linux-*
