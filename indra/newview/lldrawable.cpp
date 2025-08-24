@@ -931,11 +931,21 @@ void LLDrawable::updateDistance(LLCamera& camera, bool force_update)
         }
         else
         {
-            pos = LLVector3(getPositionGroup().getF32ptr());
+            // Use high-precision arithmetic to avoid floating-point precision loss
+            // at high altitudes. Get both object and camera positions in high precision
+            // and perform distance calculation in double precision before converting to F32.
+            
+            // Get high-precision positions
+            LLVector3d objPosHP = mVObjp->getPositionGlobal();
+            LLVector3d camPosHP = gAgentCamera.getCameraPositionGlobal();
+            
+            // Perform subtraction and distance calculation in high precision
+            LLVector3d diffHP = objPosHP - camPosHP;
+            F64 distanceHP = diffHP.length();
+            
+            // Round and store as F32 (preserving existing behavior)
+            mDistanceWRTCamera = ll_round((F32)distanceHP, 0.01f);
         }
-
-        pos -= camera.getOrigin();
-        mDistanceWRTCamera = ll_round(pos.magVec(), 0.01f);
         mVObjp->updateLOD();
     }
 }
