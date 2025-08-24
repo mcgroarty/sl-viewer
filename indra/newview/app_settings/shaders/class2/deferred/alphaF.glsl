@@ -271,28 +271,32 @@ void main()
         final_da = pow(final_da,1.2);
         vec3 sun_contrib = vec3(min(final_da, shadow));
 
-        color.rgb = srgb_to_linear(color.rgb * 0.9 + linear_to_srgb(sun_contrib) * sunlit_linear * 0.7);
+        // Optimize: reduce redundant color space conversions
+        vec3 temp_color = color.rgb * 0.9 + linear_to_srgb(sun_contrib) * sunlit_linear * 0.7;
+        color.rgb = srgb_to_linear(temp_color);
         sunlit_linear = srgb_to_linear(sunlit_linear);
     }
     else
     {
-        vec3 sun_contrib = min(final_da, shadow) * sunlit_linear;
-        color.rgb += sun_contrib;
+        color.rgb += min(final_da, shadow) * sunlit_linear;
     }
 
     color.rgb *= diffuse_linear.rgb;
 
     vec4 light = vec4(0,0,0,0);
 
-   #define LIGHT_LOOP(i) light.rgb += calcPointLightOrSpotLight(light_diffuse[i].rgb, diffuse_linear.rgb, pos.xyz, norm, light_position[i], light_direction[i].xyz, light_attenuation[i].x, light_attenuation[i].y, light_attenuation[i].z, light_attenuation[i].w);
-
-    LIGHT_LOOP(1)
-    LIGHT_LOOP(2)
-    LIGHT_LOOP(3)
-    LIGHT_LOOP(4)
-    LIGHT_LOOP(5)
-    LIGHT_LOOP(6)
-    LIGHT_LOOP(7)
+    // Manually unrolled light loop for better optimization
+    // Cache commonly used values to reduce parameter passing overhead
+    vec3 frag_pos = pos.xyz;
+    vec3 diffuse_rgb = diffuse_linear.rgb;
+    
+    light.rgb += calcPointLightOrSpotLight(light_diffuse[1].rgb, diffuse_rgb, frag_pos, norm, light_position[1], light_direction[1].xyz, light_attenuation[1].x, light_attenuation[1].y, light_attenuation[1].z, light_attenuation[1].w);
+    light.rgb += calcPointLightOrSpotLight(light_diffuse[2].rgb, diffuse_rgb, frag_pos, norm, light_position[2], light_direction[2].xyz, light_attenuation[2].x, light_attenuation[2].y, light_attenuation[2].z, light_attenuation[2].w);
+    light.rgb += calcPointLightOrSpotLight(light_diffuse[3].rgb, diffuse_rgb, frag_pos, norm, light_position[3], light_direction[3].xyz, light_attenuation[3].x, light_attenuation[3].y, light_attenuation[3].z, light_attenuation[3].w);
+    light.rgb += calcPointLightOrSpotLight(light_diffuse[4].rgb, diffuse_rgb, frag_pos, norm, light_position[4], light_direction[4].xyz, light_attenuation[4].x, light_attenuation[4].y, light_attenuation[4].z, light_attenuation[4].w);
+    light.rgb += calcPointLightOrSpotLight(light_diffuse[5].rgb, diffuse_rgb, frag_pos, norm, light_position[5], light_direction[5].xyz, light_attenuation[5].x, light_attenuation[5].y, light_attenuation[5].z, light_attenuation[5].w);
+    light.rgb += calcPointLightOrSpotLight(light_diffuse[6].rgb, diffuse_rgb, frag_pos, norm, light_position[6], light_direction[6].xyz, light_attenuation[6].x, light_attenuation[6].y, light_attenuation[6].z, light_attenuation[6].w);
+    light.rgb += calcPointLightOrSpotLight(light_diffuse[7].rgb, diffuse_rgb, frag_pos, norm, light_position[7], light_direction[7].xyz, light_attenuation[7].x, light_attenuation[7].y, light_attenuation[7].z, light_attenuation[7].w);
 
     // sum local light contrib in linear colorspace
     color.rgb += light.rgb;

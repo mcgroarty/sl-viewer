@@ -774,11 +774,22 @@ void SMAANeighborhoodBlendingVS(float2 texcoord,
 // Edge Detection Pixel Shaders (First Pass)
 
 /**
+ * Helper function to compute maximum component of a color difference
+ * Optimizes repeated max(max(t.r, t.g), t.b) operations
+ */
+float maxComponent(float3 color) {
+    return max(max(color.r, color.g), color.b);
+}
+
+/**
  * Luma Edge Detection
  *
  * IMPORTANT NOTICE: luma edge detection requires gamma-corrected colors, and
  * thus 'colorTex' should be a non-sRGB texture.
  */
+// Pre-computed luma weights for better performance
+const float3 LUMA_WEIGHTS = float3(0.2126, 0.7152, 0.0722);
+
 float2 SMAALumaEdgeDetectionPS(float2 texcoord,
                                float4 offset[3],
                                SMAATexture2D(colorTex)
@@ -794,11 +805,11 @@ float2 SMAALumaEdgeDetectionPS(float2 texcoord,
     #endif
 
     // Calculate lumas:
-    float3 weights = float3(0.2126, 0.7152, 0.0722);
-    float L = dot(SMAASamplePoint(colorTex, texcoord).rgb, weights);
+    // Use pre-computed luma weights
+    float L = dot(SMAASamplePoint(colorTex, texcoord).rgb, LUMA_WEIGHTS);
 
-    float Lleft = dot(SMAASamplePoint(colorTex, offset[0].xy).rgb, weights);
-    float Ltop  = dot(SMAASamplePoint(colorTex, offset[0].zw).rgb, weights);
+    float Lleft = dot(SMAASamplePoint(colorTex, offset[0].xy).rgb, LUMA_WEIGHTS);
+    float Ltop  = dot(SMAASamplePoint(colorTex, offset[0].zw).rgb, LUMA_WEIGHTS);
 
     // We do the usual threshold:
     float4 delta;
@@ -810,16 +821,16 @@ float2 SMAALumaEdgeDetectionPS(float2 texcoord,
         discard;
 
     // Calculate right and bottom deltas:
-    float Lright = dot(SMAASamplePoint(colorTex, offset[1].xy).rgb, weights);
-    float Lbottom  = dot(SMAASamplePoint(colorTex, offset[1].zw).rgb, weights);
+    float Lright = dot(SMAASamplePoint(colorTex, offset[1].xy).rgb, LUMA_WEIGHTS);
+    float Lbottom  = dot(SMAASamplePoint(colorTex, offset[1].zw).rgb, LUMA_WEIGHTS);
     delta.zw = abs(L - float2(Lright, Lbottom));
 
     // Calculate the maximum delta in the direct neighborhood:
     float2 maxDelta = max(delta.xy, delta.zw);
 
     // Calculate left-left and top-top deltas:
-    float Lleftleft = dot(SMAASamplePoint(colorTex, offset[2].xy).rgb, weights);
-    float Ltoptop = dot(SMAASamplePoint(colorTex, offset[2].zw).rgb, weights);
+    float Lleftleft = dot(SMAASamplePoint(colorTex, offset[2].xy).rgb, LUMA_WEIGHTS);
+    float Ltoptop = dot(SMAASamplePoint(colorTex, offset[2].zw).rgb, LUMA_WEIGHTS);
     delta.zw = abs(float2(Lleft, Ltop) - float2(Lleftleft, Ltoptop));
 
     // Calculate the final maximum delta:
@@ -858,11 +869,11 @@ float2 SMAAColorEdgeDetectionPS(float2 texcoord,
 
     float3 Cleft = SMAASamplePoint(colorTex, offset[0].xy).rgb;
     float3 t = abs(C - Cleft);
-    delta.x = max(max(t.r, t.g), t.b);
+    delta.x = maxComponent(t);
 
     float3 Ctop  = SMAASamplePoint(colorTex, offset[0].zw).rgb;
     t = abs(C - Ctop);
-    delta.y = max(max(t.r, t.g), t.b);
+    delta.y = maxComponent(t);
 
     // We do the usual threshold:
     float2 edges = step(threshold, delta.xy);
@@ -874,11 +885,11 @@ float2 SMAAColorEdgeDetectionPS(float2 texcoord,
     // Calculate right and bottom deltas:
     float3 Cright = SMAASamplePoint(colorTex, offset[1].xy).rgb;
     t = abs(C - Cright);
-    delta.z = max(max(t.r, t.g), t.b);
+    delta.z = maxComponent(t);
 
     float3 Cbottom  = SMAASamplePoint(colorTex, offset[1].zw).rgb;
     t = abs(C - Cbottom);
-    delta.w = max(max(t.r, t.g), t.b);
+    delta.w = maxComponent(t);
 
     // Calculate the maximum delta in the direct neighborhood:
     float2 maxDelta = max(delta.xy, delta.zw);
@@ -886,11 +897,11 @@ float2 SMAAColorEdgeDetectionPS(float2 texcoord,
     // Calculate left-left and top-top deltas:
     float3 Cleftleft  = SMAASamplePoint(colorTex, offset[2].xy).rgb;
     t = abs(C - Cleftleft);
-    delta.z = max(max(t.r, t.g), t.b);
+    delta.z = maxComponent(t);
 
     float3 Ctoptop = SMAASamplePoint(colorTex, offset[2].zw).rgb;
     t = abs(C - Ctoptop);
-    delta.w = max(max(t.r, t.g), t.b);
+    delta.w = maxComponent(t);
 
     // Calculate the final maximum delta:
     maxDelta = max(maxDelta.xy, delta.zw);
