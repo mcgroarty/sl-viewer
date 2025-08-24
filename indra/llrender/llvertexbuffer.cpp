@@ -1208,7 +1208,9 @@ void LLVertexBuffer::destroyGLIndices()
 
 bool LLVertexBuffer::updateNumVerts(U32 nverts)
 {
-    llassert(nverts >= 0);
+    // nverts is U32 (unsigned), so no need to check >= 0
+    // Instead, check for reasonable upper bound to prevent excessive allocations
+    llassert(nverts <= 0xFFFFFF); // Reasonable upper limit for vertex count
 
     bool success = true;
 
