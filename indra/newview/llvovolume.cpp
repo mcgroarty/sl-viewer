@@ -1042,6 +1042,12 @@ LLDrawable *LLVOVolume::createDrawable(LLPipeline *pipeline)
     bool force_update = true; // avoid non-alpha mDistance update being optimized away
     mDrawable->updateDistance(*LLViewerCamera::getInstance(), force_update);
 
+    // If mesh was already loaded but couldn't be properly updated due to missing drawable, mark for update now
+    if (mSculptChanged && isMesh())
+    {
+        gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY);
+    }
+
     return mDrawable;
 }
 
@@ -1238,7 +1244,10 @@ void LLVOVolume::updateVisualComplexity()
 void LLVOVolume::notifyMeshLoaded()
 {
     mSculptChanged = true;
-    gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY);
+    if (mDrawable.notNull())
+    {
+        gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_GEOMETRY);
+    }
 
     if (!mSkinInfo && !mSkinInfoUnavaliable)
     {
